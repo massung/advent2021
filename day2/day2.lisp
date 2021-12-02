@@ -20,17 +20,11 @@
       (values pos depth (- aim n))
     (values pos (- depth n))))
 
-(defun move (lines &optional aim)
-  (let ((pos 0)
-        (depth 0))
-    (loop
-       for cmd in lines
-       do (multiple-value-bind (npos ndepth naim)
-              (funcall (first cmd) (second cmd) pos depth aim)
-            (setf pos npos)
-            (setf depth ndepth)
-            (setf aim naim)))
-    (* pos depth)))
+(defun move (lines &optional aim &aux (pos 0) (depth 0))
+  (dolist (cmd lines)
+    (setf (values pos depth aim)
+          (funcall (first cmd) (second cmd) pos depth aim)))
+  (* pos depth))
 
 (defun part-1 (&optional (data #'test-data))
   (move (funcall data #'parse-line)))
