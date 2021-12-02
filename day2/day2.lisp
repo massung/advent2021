@@ -1,8 +1,6 @@
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (load "../common/common.lisp"))
 
-(use-package :advent)
-
 (defun parse-line (s)
   (with-input-from-string (f s)
     (list (read f) (read f))))

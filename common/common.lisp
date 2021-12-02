@@ -1,15 +1,3 @@
-(defpackage :advent
-  (:use :cl)
-  (:export
-   #:puzzle
-   #:puzzle-pathname
-   #:read-lines
-   #:read-data
-   #:test-data
-   #:real-data))
-
-(in-package :advent)
-
 (defun puzzle ()
   "Returns the current puzzle number (day of month)."
   (nth-value 3 (decode-universal-time (+ 3600 (get-universal-time)))))

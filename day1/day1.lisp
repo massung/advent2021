@@ -1,8 +1,6 @@
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (load "../common/common.lisp"))
 
-(use-package :advent)
-
 (defun steps (depths)
   (let ((i (car depths)))
     (loop for d in (cdr depths)
