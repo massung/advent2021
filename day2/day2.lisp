@@ -21,10 +21,9 @@
     (values pos (- depth n))))
 
 (defun move (lines &optional aim &aux (pos 0) (depth 0))
-  (dolist (cmd lines)
+  (dolist (cmd lines (* pos depth))
     (setf (values pos depth aim)
-          (funcall (first cmd) (second cmd) pos depth aim)))
-  (* pos depth))
+          (funcall (first cmd) (second cmd) pos depth aim))))
 
 (defun part-1 (&optional (data #'test-data))
   (move (funcall data #'parse-line)))
