@@ -24,8 +24,8 @@
 
 (defun part-1 (&optional (data #'test-data))
   (let* ((lines (funcall data))
-         (gamma 0)
-         (n (length (first lines))))
+         (n (length (first lines)))
+         (gamma 0))
     (dotimes (i n)
       (setf gamma (logior (ash gamma 1) (count-bits lines i))))
     (let ((epsilon (logand (lognot gamma) (1- (ash 1 n)))))
