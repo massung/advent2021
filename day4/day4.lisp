@@ -16,12 +16,10 @@
         #*0000100001000010000100001))
 
 (defun read-board (s)
-  (let ((b (make-board :ns (make-hash-table) :marks (make-array 25 :element-type 'bit))))
-    (dotimes (y 5 b)
-      (with-input-from-string (v (read-line s))
-        (dotimes (x 5)
-          (let ((n (read v)))
-            (setf (gethash n (board-ns b)) (+ (* y 5) x))))))))
+  (let ((hash (make-hash-table))
+        (marks (make-array 25 :element-type 'bit)))
+    (dotimes (i 25 (make-board :ns hash :marks marks))
+      (setf (gethash (read s) hash) i))))
 
 (defun read-calls (s)
   (with-input-from-string (v (read-line s))
@@ -33,14 +31,11 @@
           (boards (loop while (read-line s nil) collect (read-board s))))
       (values calls boards))))
 
-(defun check-bingo (board)
-  (some #'(lambda (b) (equal (bit-and b (board-marks board)) b)) *bingos*))
-
 (defun place-mark (board call)
   (let ((i (gethash call (board-ns board))))
     (when i
       (setf (bit (board-marks board) i) 1)
-      (and (check-bingo board) board))))
+      (some #'(lambda (b) (equal (bit-and b (board-marks board)) b)) *bingos*))))
 
 (defun unmarked (board)
   (loop
