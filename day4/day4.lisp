@@ -15,6 +15,9 @@
         #*0001000010000100001000010
         #*0000100001000010000100001))
 
+(defun bingop (marks)
+  (some #'(lambda (b) (equal (bit-and b marks) b)) *bingos*))
+
 (defun read-board (s)
   (let ((hash (make-hash-table))
         (marks (make-array 25 :element-type 'bit)))
@@ -35,7 +38,7 @@
   (let ((i (gethash call (board-ns board))))
     (when i
       (setf (bit (board-marks board) i) 1)
-      (some #'(lambda (b) (equal (bit-and b (board-marks board)) b)) *bingos*))))
+      (bingop (board-marks board)))))
 
 (defun unmarked (board)
   (loop
