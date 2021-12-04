@@ -1,6 +1,6 @@
 #!/bin/bash -xe
 
-day=$(date +"%-d")
+day=$(date -v +1d +%-d)
 dir="day${day}"
 
 # create the directory for the day
