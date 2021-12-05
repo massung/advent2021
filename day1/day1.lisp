@@ -1,5 +1,5 @@
 (eval-when (:compile-toplevel :load-toplevel :execute)
-  (load "../common/common.lisp"))
+  (load "/Users/jeff/Projects/advent/common/common.lisp"))
 
 (defun steps (depths)
   (let ((i (car depths)))

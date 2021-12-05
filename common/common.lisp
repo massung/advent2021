@@ -1,3 +1,9 @@
+(eval-when (:load-toplevel :compile-toplevel :execute)
+  (require :re)
+
+  ;; helper package for parsing
+  (use-package :re))
+
 (defun puzzle ()
   "Returns the current puzzle number (day of month)."
   (nth-value 3 (decode-universal-time (+ 3600 (get-universal-time)))))
@@ -21,3 +27,6 @@
 (defun real-data (&optional (reader #'identity))
   "Loads the real data for this puzzle."
   (read-lines (format nil "~a/real.txt" (puzzle-pathname)) reader))
+
+(defun read-numbers (str &key (sep #r/%s+/) (read #'parse-integer))
+  (mapcar read (re:split-re sep str :all t)))

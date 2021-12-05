@@ -1,5 +1,5 @@
 (eval-when (:compile-toplevel :load-toplevel :execute)
-  (load "../common/common.lisp"))
+  (load "/Users/jeff/Projects/advent/common/common.lisp"))
 
 (defstruct board ns marks)
 
@@ -25,8 +25,7 @@
       (setf (gethash (read s) hash) i))))
 
 (defun read-calls (s)
-  (with-input-from-string (v (read-line s))
-    (loop for n = (read v nil) while n do (read-char v nil) collect n)))
+  (read-numbers (read-line s) :sep ","))
 
 (defun read-input (fn)
   (with-open-file (s fn)

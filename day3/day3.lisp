@@ -1,5 +1,5 @@
 (eval-when (:compile-toplevel :load-toplevel :execute)
-  (load "../common/common.lisp"))
+  (load "/Users/jeff/Projects/advent/common/common.lisp"))
 
 (defun count-bits (lines bit &aux (n0 0) (n1 0))
   (dolist (line lines (if (> n0 n1) 0 1))
