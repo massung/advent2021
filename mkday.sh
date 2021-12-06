@@ -1,9 +1,10 @@
-#!/bin/bash -xe
+#!/bin/bash -e
 
 day=$(date -v +1d +%-d)
 dir="day${day}"
 
 # create the directory for the day
+echo "Creating $dir/..."
 mkdir -p $dir
 
 # touch the real and test data in there
