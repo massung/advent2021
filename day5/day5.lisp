@@ -25,7 +25,7 @@
 (defun run (data &optional diagp)
   (let ((board (make-hash-table :test #'equalp)))
     (funcall data #'(lambda (s) (read-coords board s diagp)))
-    (loop for n being the hash-values in board when (> n 1) sum 1)))
+    (time (loop for n being the hash-values in board when (> n 1) sum 1))))
 
 (defun part-1 (&optional (data #'test-data))
   (run data))

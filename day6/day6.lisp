@@ -18,8 +18,8 @@
 
 (defun part-1 (&optional (data #'test-data))
   (let ((ages (first (funcall data #'parse-ages))))
-    (count-fish ages 18)))
+    (time (count-fish ages 18))))
 
 (defun part-2 (&optional (data #'test-data))
   (let ((ages (first (funcall data #'parse-ages))))
-    (count-fish ages 256)))
+    (time (count-fish ages 256))))

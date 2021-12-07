@@ -3,8 +3,8 @@
 
 (defun part-1 (&optional (data #'test-data))
   (let ((lines (funcall data #'read-from-string)))
-    nil))
+    (time nil)))
 
 (defun part-2 (&optional (data #'test-data))
   (let ((lines (funcall data #'read-from-string)))
-    nil))
+    (time nil)))

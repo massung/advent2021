@@ -4,11 +4,9 @@
   ;; helper package for parsing
   (use-package :re))
 
-(defun puzzle ()
-  "Returns the current puzzle number (day of month)."
-  (nth-value 3 (decode-universal-time (+ 3600 (get-universal-time)))))
+(defparameter *day* (nth-value 3 (decode-universal-time (+ 3600 (get-universal-time)))))
 
-(defun puzzle-pathname (&optional (day (puzzle)))
+(defun puzzle-pathname (&optional (day *day*))
   "Returns the path to the day's puzzle data."
   (format nil "/Users/jeff/Projects/advent/day~a" day))
 

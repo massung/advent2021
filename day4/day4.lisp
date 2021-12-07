@@ -28,7 +28,7 @@
   (read-numbers (read-line s) :sep ","))
 
 (defun read-input (fn)
-  (with-open-file (s fn)
+  (with-open-file (s (format nil "~a/~a" (puzzle-pathname 4) fn))
     (let ((calls (read-calls s))
           (boards (loop while (read-line s nil) collect (read-board s))))
       (values calls boards))))
@@ -60,7 +60,11 @@
       (find-last calls (remove-if #'(lambda (b) (place-mark b call)) boards)))))
 
 (defun part-1 (&optional (fn "test.txt"))
-  (multiple-value-call #'play (read-input fn)))
+  (multiple-value-bind (calls boards)
+      (read-input fn)
+    (time (play calls boards))))
 
 (defun part-2 (&optional (fn "test.txt"))
-  (multiple-value-call #'find-last (read-input fn)))
+  (multiple-value-bind (calls boards)
+      (read-input fn)
+    (time (find-last calls boards))))

@@ -26,7 +26,9 @@
           (funcall (first cmd) (second cmd) pos depth aim))))
 
 (defun part-1 (&optional (data #'test-data))
-  (move (funcall data #'parse-line)))
+  (let ((i (funcall data #'parse-line)))
+    (time (move i))))
 
 (defun part-2 (&optional (data #'test-data))
-  (move (funcall data #'parse-line) 0))
+  (let ((i (funcall data #'parse-line)))
+    (time (move i 0))))

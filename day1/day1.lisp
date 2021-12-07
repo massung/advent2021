@@ -10,7 +10,7 @@
 
 (defun part-1 (&optional (data #'test-data))
   (let ((lines (funcall data #'read-from-string)))
-    (count-if #'plusp (steps lines))))
+    (time (count-if #'plusp (steps lines)))))
 
 (defun part-2 (&optional (data #'test-data))
   (let* ((lines (funcall data #'read-from-string))
@@ -20,4 +20,4 @@
                      for z = (second lines)
                      while (and x y z)
                      collect (+ x y z))))
-    (count-if #'plusp (steps windows))))
+    (time (count-if #'plusp (steps windows)))))
