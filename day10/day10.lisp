@@ -38,7 +38,7 @@
 
 (defun part-1 (&optional (data #'test-data))
   (time (let ((errors (funcall data #'parse-chunks)))
-          (reduce #'+ (remove-if-not #'numberp errors)))))
+          (loop for e in errors when (numberp e) sum e))))
 
 (defun part-2 (&optional (data #'test-data))
   (time (let* ((chunks (funcall data #'parse-chunks))
