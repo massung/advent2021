@@ -42,7 +42,7 @@
 (defun part-2 (&optional (data #'test-data))
   (let ((m (parse-matrix (funcall data))))
     (time (loop
-             for i from 0
+             for i from 1
              for n = (step-matrix m)
              when (= n 100)
-             return (1+ i)))))
+             return i))))
