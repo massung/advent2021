@@ -41,8 +41,4 @@
 
 (defun part-2 (&optional (data #'test-data))
   (let ((m (parse-matrix (funcall data))))
-    (time (loop
-             for i from 1
-             for n = (step-matrix m)
-             when (= n 100)
-             return i))))
+    (time (loop for i from 1 when (= (step-matrix m) 100) return i))))
