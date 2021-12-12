@@ -18,15 +18,14 @@
                  (list path)
                (loop
                   for b in (gethash (car path) graph)
-                  when (string/= b "start")
-                  append (let ((visited (member b path :test 'equal)))
-                           (when (or (upper-case-p (char b 0))
-                                     (not visited)
-                                     (not double-backed-p))
-                             (discover (cons b path)
-                                       (or double-backed-p
-                                           (and visited
-                                                (lower-case-p (char b 0)))))))))))
+                  for small = (lower-case-p (char b 0))
+                  for visited = (member b path :test 'equal)
+                  when (and (or (not small)
+                                (not visited)
+                                (not double-backed-p))
+                            (string/= b "start"))
+                  append (discover (cons b path)
+                                   (or double-backed-p (and visited small)))))))
     (discover (list "start") (not allow-double-back-p))))
 
 (defun part-1 (&optional (data #'test-data))
