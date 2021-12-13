@@ -6,7 +6,7 @@
                    for line = (pop lines)
                    while (plusp (length line))
                    collect (re:with-re-match (m (re:match-re "(%d+),(%d+)" line))
-                             (cons (parse-integer $1) (parse-integer $2))))))
+                             (list (parse-integer $1) (parse-integer $2))))))
     (values coords lines)))
 
 (defun parse-folds (lines)
@@ -20,42 +20,41 @@
       (parse-coords lines)
     (values coords (parse-folds rest))))
 
-(defun empty-matrix (w h)
-  (flet ((make-row ()
-           (make-array w :element-type 'bit)))
-    (make-array h :initial-contents (loop for i below h collect (make-row)))))
-
 (defun build-matrix (coords)
-  (let ((max-x (1+ (apply #'max (mapcar #'car coords))))
-        (max-y (1+ (apply #'max (mapcar #'cdr coords)))))
-    (loop
-       with m = (empty-matrix max-x max-y)
-       for coord in coords
-       for x = (car coord)
-       for y = (cdr coord)
-       do (setf (bit (aref m y) x) 1)
-       finally (return m))))
+  (loop
+     with m = (make-hash-table :test 'equal)
+     for coord in coords
+     do (setf (gethash coord m) t)
+     finally (return m)))
 
 (defun fold-x (m pos)
   (loop
-     with folded = (make-array (length m))
-     for y from 0
-     for row across m
-     do (let ((left (subseq row 0 pos))
-              (right (subseq row (1+ pos))))
-          (setf (aref folded y) (bit-ior left (reverse right))))
+     with folded = (make-hash-table :test 'equal)
+     for coord being the hash-keys of m
+     for bit = (gethash coord m)
+     for x = (first coord)
+     for y = (second coord)
+     do (cond
+          ((< x pos)
+           (setf (gethash coord folded) t))
+          ((> x pos)
+           (let ((opp (- pos (- x pos))))
+             (setf (gethash (list opp y) folded) t))))
      finally (return folded)))
 
 (defun fold-y (m pos)
   (loop
-     with folded = (make-array pos)
-     for y from (1- pos) downto 0
-     for opposite from (1+ pos)
-     for row = (aref m y)
-     do (setf (aref folded y)
-              (if (< opposite (length m))
-                  (bit-ior row (aref m opposite))
-                (copy-seq row)))
+     with folded = (make-hash-table :test 'equal)
+     for coord being the hash-keys of m
+     for bit = (gethash coord m)
+     for x = (first coord)
+     for y = (second coord)
+     do (cond
+          ((< y pos)
+           (setf (gethash coord folded) t))
+          ((> y pos)
+           (let ((opp (- pos (- y pos))))
+             (setf (gethash (list x opp) folded) t))))
      finally (return folded)))
 
 (defun fold-matrix (m folds)
@@ -71,11 +70,15 @@
   (multiple-value-bind (coords folds)
       (parse-input (funcall data))
     (time (let ((m (fold-matrix (build-matrix coords) (subseq folds 0 1))))
-            (loop for v across m sum (loop for b across v sum b))))))
+            (hash-table-count m)))))
 
 (defun part-2 (&optional (data #'test-data))
   (multiple-value-bind (coords folds)
       (parse-input (funcall data))
-    (time (loop
-             for bits across (fold-matrix (build-matrix coords) folds)
-             do (print bits)))))
+    (time (let* ((m (fold-matrix (build-matrix coords) folds))
+                 (coords (loop for coord being the hash-keys of m collect coord))
+                 (w (1+ (reduce #'max coords :key #'first)))
+                 (h (1+ (reduce #'max coords :key #'second))))
+            (dotimes (y h)
+              (dotimes (x w (terpri))
+                (princ (gethash (list x y) m #\space))))))))
