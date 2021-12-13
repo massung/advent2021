@@ -24,7 +24,7 @@
   (loop
      with m = (make-hash-table :test 'equal)
      for coord in coords
-     do (setf (gethash coord m) t)
+     do (setf (gethash coord m) #\#)
      finally (return m)))
 
 (defun fold-x (m pos)
@@ -36,10 +36,10 @@
      for y = (second coord)
      do (cond
           ((< x pos)
-           (setf (gethash coord folded) t))
+           (setf (gethash coord folded) #\#))
           ((> x pos)
            (let ((opp (- pos (- x pos))))
-             (setf (gethash (list opp y) folded) t))))
+             (setf (gethash (list opp y) folded) #\#))))
      finally (return folded)))
 
 (defun fold-y (m pos)
@@ -51,10 +51,10 @@
      for y = (second coord)
      do (cond
           ((< y pos)
-           (setf (gethash coord folded) t))
+           (setf (gethash coord folded) #\#))
           ((> y pos)
            (let ((opp (- pos (- y pos))))
-             (setf (gethash (list x opp) folded) t))))
+             (setf (gethash (list x opp) folded) #\#))))
      finally (return folded)))
 
 (defun fold-matrix (m folds)
