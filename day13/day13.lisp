@@ -70,12 +70,12 @@
 (defun part-1 (&optional (data #'test-data))
   (multiple-value-bind (coords folds)
       (parse-input (funcall data))
-    (let ((m (fold-matrix (build-matrix coords) (subseq folds 0 1))))
-      (loop for v across m sum (loop for b across v sum b)))))
+    (time (let ((m (fold-matrix (build-matrix coords) (subseq folds 0 1))))
+            (loop for v across m sum (loop for b across v sum b))))))
 
 (defun part-2 (&optional (data #'test-data))
   (multiple-value-bind (coords folds)
       (parse-input (funcall data))
-    (loop
-       for bits across (fold-matrix (build-matrix coords) folds)
-       do (print bits))))
+    (time (loop
+             for bits across (fold-matrix (build-matrix coords) folds)
+             do (print bits)))))
