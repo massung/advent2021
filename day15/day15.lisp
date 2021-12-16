@@ -4,51 +4,44 @@
   ;; additional libraries
   (require :pathfind))
 
-(defun build-map (lines)
-  (flet ((parse-row (line)
-           (map 'vector #'digit-char-p line)))
-    (map 'vector #'parse-row lines)))
+(defun build-matrix (lines)
+  (loop
+     with w = (length (first lines))
+     for line in lines
+     for h from 1
+     collect (map 'list #'digit-char-p line) into grid
+     finally (return (make-array (list w h) :initial-contents grid))))
 
-(defun expand-row (row inc)
-  (apply #'concatenate 'vector (loop
-                                  for k below 5
-                                  collect (map 'list #'(lambda (x)
-                                                         (let ((nx (+ x inc k)))
-                                                           (if (< nx 10)
-                                                               nx
-                                                             (1+ (rem nx 10)))))
-                                               row))))
-
-(defun tile-map (m)
-  (let* ((h (length m))
-         (rows (loop
-                  for y below (* h 5)
-                  collect (multiple-value-bind (q r)
-                              (truncate y h)
-                            (expand-row (aref m r) q)))))
-    (coerce rows 'vector)))
-
-(defun end-pos (m)
-  (list (1- (length (aref m 0))) (1- (length m))))
+(defun get-cost (m x y)
+  (destructuring-bind (w h)
+      (array-dimensions m)
+    (multiple-value-bind (qx rx) (truncate x w)
+      (multiple-value-bind (qy ry) (truncate y h)
+        (let ((cost (+ (aref m ry rx) qx qy)))
+          (if (< cost 10)
+              cost
+            (- cost 9)))))))
 
 (defun find-path (m x1 y1 x2 y2)
   (flet ((edges (pos)
-           (destructuring-bind (x y)
-               pos
+           (destructuring-bind (x y) pos
              (loop
                 for (dx dy) in '((1 0) (0 1))
                 for nx = (+ x dx)
                 for ny = (+ y dy)
                 when (and (<= 0 nx x2) (<= 0 ny y2))
-                collect `((,nx ,ny) ,(aref (aref m ny) nx))))))
+                collect `((,nx ,ny) ,(get-cost m nx ny))))))
 
     ;; preform the pathfind
     (pf:pathfind (list x1 y1) (list x2 y2) #'edges)))
 
+(defun run (m &optional (dim 1))
+  (destructuring-bind (w h)
+      (array-dimensions m)
+    (find-path m 0 0 (1- (* w dim)) (1- (* h dim)))))
+
 (defun part-1 (&optional (data #'test-data))
-  (let ((m (build-map (funcall data))))
-    (time (apply #'find-path m 0 0 (end-pos m)))))
+  (time (run (build-matrix (funcall data)))))
 
 (defun part-2 (&optional (data #'test-data))
-  (let ((m (tile-map (build-map (funcall data)))))
-    (time (apply #'find-path m 0 0 (end-pos m)))))
+  (time (run (build-matrix (funcall data)) 5)))
