@@ -1,8 +1,8 @@
 (eval-when (:load-toplevel :compile-toplevel :execute)
-  (require :re)
+  (require :boost-re)
 
   ;; helper package for parsing
-  (use-package :re))
+  (use-package :boost-re))
 
 (defparameter *day* (nth-value 3 (decode-universal-time (+ 3600 (get-universal-time)))))
 
@@ -27,4 +27,4 @@
   (read-lines (format nil "~a/real.txt" (puzzle-pathname)) reader))
 
 (defun read-numbers (str &key (sep #r/%s+/) (read #'parse-integer))
-  (mapcar read (re:split-re sep str :all t)))
+  (mapcar read (split-re sep str :all t)))

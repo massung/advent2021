@@ -2,7 +2,7 @@
   (load "/Users/jeff/Projects/advent/common/common.lisp")
 
   ;; additional libraries
-  (require :pathfind))
+  (require :boost-pathfind))
 
 (defun build-matrix (lines)
   (loop
@@ -33,7 +33,7 @@
                 collect `((,nx ,ny) ,(get-cost m nx ny))))))
 
     ;; preform the pathfind
-    (pf:pathfind (list x1 y1) (list x2 y2) #'edges)))
+    (boost-pathfind:pathfind (list x1 y1) (list x2 y2) #'edges)))
 
 (defun run (m &optional (dim 1))
   (destructuring-bind (w h)
