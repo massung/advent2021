@@ -18,6 +18,14 @@
        while line
        collect (funcall reader line))))
 
+(defun test-pathname ()
+  "Returns the pathname of the test data."
+  (format nil "~a/test.txt" (puzzle-pathname)))
+
+(defun real-pathname ()
+  "Returns the pathname of the real data."
+  (format nil "~a/real.txt" (puzzle-pathname)))
+
 (defun test-data (&optional (reader #'identity))
   "Loads the test data for this puzzle."
   (read-lines (format nil "~a/test.txt" (puzzle-pathname)) reader))
