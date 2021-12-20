@@ -41,8 +41,8 @@
            for x from -1 to width
            for lit = (enhance-pixel input iea x y)
            when lit
-           do (setf (gethash (cons x y) output) 1))
-     finally (return output))))
+           do (setf (gethash (cons (1+ x) (1+ y)) output) 1))
+     finally (return output)))
 
 (defun print-image (image width height)
   (loop
