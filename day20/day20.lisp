@@ -60,9 +60,14 @@
     (time (let ((default 0))
             (dotimes (i n)
               (setf image (enhance image iea width height default))
-              (setf default (enhance-pixel image iea -1000 -1000 default))
+
+              ;; increase the size of the image
               (incf width 2)
-              (incf height 2))
+              (incf height 2)
+
+              ;; this is stupid - toggle the default between first and last bit of iea
+              (setf default (let ((c (char iea (if (zerop default) 0 511))))
+                              (if (char= c #\#) 1 0))))
             (loop for bit being the hash-values of image sum bit)))))
 
 (defun part-1 (&optional (data #'test-data))
