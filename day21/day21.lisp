@@ -47,22 +47,22 @@
 For the quantum die - rolled 3 times - even though there are 27 possible
 combinations of rolls, the final outcome is limited to range [3,9]. Even
 rolling the worst possible combinations imaginable (toggling between
-positions 1 and 4), the player would still win in 10 turns in the worst
-case.
+positions 1 and 4), the player would still win in 10 turns.
 
 Each player gets a turn (except for a turn when player 1 wins), so for
 each round there are 729 possible die combinations (27*27), but only
-49 (7*7) outcomes.
+49 (7*7) game state outcomes.
 
 The total number of possible games that are played before the player
 reaches a score of 21 is 729^10. But the actual number of possible game
 outcomes is limited to 49^10. And the majority of those games are won
-very early.
+very early and so we don't actually get anywhere close to that number.
 
 For each player, we build a vector where the index is how many turns it
-took to reach a score of 21 and the value is the count of combinations
-could possibly get there. These vectors are built in parallel as all
-games are played out, bouncing between each player.
+took to reach a score of 21 and the value is the count of all possible
+combinations of die rolls would produce that winning state. These vectors
+are built in parallel as all games are played out, bouncing between each
+player.
 
 Since we're reducing 27^10 down to 7^10, for each turn we need to keep
 track of how many dice combinations arrived at the same place. This is
@@ -108,7 +108,7 @@ of times each player won.
   (defun part-2 (&optional (data #'test-data))
     (destructuring-bind (p1 p2)
         (funcall data #'parse-starting-pos)
-      (multiple-value-bind (p1-wins p2-wins)
-          (simulate-quantum-game p1 p2)
-        (max (reduce #'+ p1-wins)
-             (reduce #'+ p2-wins)))))
+      (time (multiple-value-bind (p1-wins p2-wins)
+                (simulate-quantum-game p1 p2)
+              (max (reduce #'+ p1-wins)
+                   (reduce #'+ p2-wins))))))
