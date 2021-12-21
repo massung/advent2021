@@ -35,7 +35,7 @@
 
 (defun enhance (input iea width height default)
   (loop
-     with output = (make-hash-table :test 'equal)
+     with output = (make-hash-table :test 'equal :size (hash-table-size input))
      for y from -1 to height
      do (loop
            for x from -1 to width
